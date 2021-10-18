@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&family=Merriweather&family=Merriweather+Sans:wght@300;400&family=Playfair+Display&family=Poppins:wght@100;200;300;400&family=Roboto&display=swap");
+
+$bg-color: bisque;
+$color: darkslategrey;
+$header: "Poppins", sans-serif;
+$body: "Roboto", sans-serif;
+$alt-bg-color: darkolivegreen;
+$alt-color: antiquewhite;
+$alt-header: "EB Garamond", "Times New Roman", Times, serif;
+$alt-body: "Playfair Display", "Times New Roman", Times, serif;
+$alt-link: burlywood;
+$alt-link-hover: peru;
+$media-sm: 576px;
+$media-md: 768px;
+$media-lg: 992px;
+
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+body {
+  font-family: $body;
+  h5 {
+    font-family: $header;
+    font-weight: 100;
+  }
+  h4 {
+    font-family: $header;
+    font-weight: 300;
+  }
+  .card-title {
+    font-family: $header;
+    font-weight: 300;
+  }
+}
+
+a {
+  color: inherit;
+}
+
+.carousel-btn-container {
+  background: bisque;
+  width: 100%;
+  height: 100%;
+}
+
+.guide {
+  font-family: $alt-body;
+  img {
+    max-width: 100%;
+    border-radius: calc(0.25rem - 1px);
+    &.mb-3 {
+      @media screen and (max-width: $media-sm) {
+        padding: 5px;
+      }
+    }
+  }
+}
+
+#plant-guide {
+  margin-top: 40px;
+}
+
+.guide-item {
+  background-color: $bg-color;
+  color: $color;
+  border-radius: calc(0.25rem - 1px);
+  padding: 20px;
+  @media screen and (min-width: $media-lg) {
+    height: auto;
+  }
+  @media screen and (min-width: $media-md) and (max-width: $media-lg) {
+    height: auto;
+  }
+  .guide-text-right {
+    padding: 4em;
+    @media screen and (min-width: $media-sm) {
+      padding: 4em 4em 0 0;
+    }
+  }
+  .guide-text {
+    padding: 4em;
+  }
+  .plant-center {
+    @media screen and (max-width: $media-md) {
+      text-align: center;
+    }
+  }
+}
+
+.navbar-brand {
+  font-family: $header;
+  font-weight: 300;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: $bg-color;
+  background-color: $color;
+}
+
+.navbar {
+  z-index: 9;
+}
+
+.navbar-sticky {
+  position: fixed;
+  top: 0px;
+  background: white;
+  z-index: 9;
+  width: 100vw;
+}
+
+.collapse .room-form {
+  @media screen and (min-width: $media-md) {
+    display: none !important;
+  }
+}
+
+#toastcontainer {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+}
+
+.toast {
+  a {
+    color: $color;
+  }
+}
+
+.toast-p {
+  margin: 0;
+  padding: 5px;
+  text-align: center;
+}
+
+.card {
+  height: 100%;
+}
+
+.explainer {
+  background-color: $color;
+  color: $bg-color;
+  font-family: $alt-body;
+  a {
+    color: $alt-link;
+    &:hover {
+      color: $alt-link-hover;
+    }
+  }
+  .card-title {
+    font-family: $alt-header;
+    font-weight: bolder;
+  }
+}
+
+#modal-image-container {
+  width: 100%;
+  height: auto;
+}
+
+.modal-popover {
+  position: absolute;
+  width: 100%;
+  height: 33.33%;
+
+  a {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+  }
+
+  a:focus {
+    outline: none;
+  }
+}
+
+.modal-popover.top {
+  top: 0;
+}
+
+.modal-popover.middle {
+  top: 33.33%;
+}
+
+.modal-popover.bottom {
+  top: 66.66%;
+}
