@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  react:
+    build: "./plantselector-react"
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - server:plantselector-server
+    networks:
+      - plantnetwork
+  server:
+    build: "./plantselector-server"
+    restart: always
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mongodb
+    networks:
+      - plantnetwork
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    volumes:
+      - ./data-node:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth --smallfiles
+    networks:
+      - plantnetwork
+networks:
+  plantnetwork:
+    driver: bridge
