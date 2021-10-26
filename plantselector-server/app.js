@@ -4,23 +4,27 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const dummyData = require("./dummyData");
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-// const plantsRouter = require("./routes/plants");
+const userRouter = require("./routes/users");
+const plantRouter = require("./routes/plants");
+const explainerRouter = require("./routes/explainers");
 
 const Users = require("./models/users");
+const Plants = require("./models/plants");
+const Explainers = require("./models/explainers");
 
-const url = "mongodb://localhost:27017/test";
+const url = "mongodb://localhost:27017/PlantSelector";
 const connect = mongoose.connect(url);
-connect.then(
-  (db) => {
-    console.log("connected correctly to database");
-  },
-  (err) => {
-    console.log(err);
-  }
-);
+connect.then((db) => {
+  console.log("connected correctly to database");
+  // return Plants.remove({}).then((plants) => {
+  //   return Explainers.remove({});
+  // });
+});
+
+dummyData(connect);
 
 const app = express();
 
@@ -35,8 +39,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-// app.use("/users", usersRouter);
-// app.use("/plants", plantsRouter);
+app.use("/users", userRouter);
+app.use("/plants", plantRouter);
+app.use("/explainers", explainerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

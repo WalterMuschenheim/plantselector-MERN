@@ -1,5 +1,5 @@
 # Use a lighter version of Node as a parent image
-FROM mhart/alpine-node:6.17
+FROM mhart/alpine-node:14.17
 # Set the working directory to /plantselector-server 
 WORKDIR /plantselector-server 
 # copy package.json into the container at /plantselector-server

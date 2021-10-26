@@ -1,6 +1,5 @@
 import * as ActionTypes from "./ActionTypes";
-import { PLANTS } from "../shared/plants";
-import { EXPLAINERS } from "../shared/explainers";
+import { baseUrl } from "../shared/baseUrl";
 
 export const addCriteria = (type, criterium) => {
   return { type: ActionTypes.ADD_CRITERIUM, payload: [type, criterium] };
@@ -38,20 +37,31 @@ export const plantsLoading = () => {
   return { type: ActionTypes.PLANTS_LOADING };
 };
 
-// export const addPlants = (plants, explainers) => {
-export const addPlants = () => {
+export const addPlants = ({ plants, explainers }) => {
   return {
     type: ActionTypes.ADD_PLANTS,
-    payload: { plants: PLANTS, explainers: EXPLAINERS },
+    payload: {
+      plants: plants,
+      explainers: explainers,
+    },
   };
 };
 
 export const fetchPlants = () => (dispatch) => {
   dispatch(plantsLoading());
 
-  setTimeout(() => {
-    dispatch(addPlants());
-  }, 2000);
+  fetch(baseUrl + "plants")
+    .then((plants) => plants.json())
+    .then((plants) => {
+      console.log(plants);
+      return fetch(baseUrl + "explainers")
+        .then((explainers) => explainers.json())
+        .then((explainers) => {
+          console.log({ plants, explainers });
+          return { plants, explainers };
+        });
+    })
+    .then((result) => dispatch(addPlants(result)));
 };
 
 export const saveRoom = (criteria, room, rooms) => {
