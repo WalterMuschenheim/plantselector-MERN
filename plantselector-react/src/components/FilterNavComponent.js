@@ -28,7 +28,11 @@ function FilterNav(props) {
   const toggle = () => setIsOpen(!isOpen);
 
   const handleScroll = (stickiness, guideHeight, navHeight) => {
-    console.log("scrollY in here is" + window.scrollY);
+    console.log(
+      "scrollY in here is" + window.scrollY,
+      "nav height is " + navHeight,
+      "guide height is " + guideHeight
+    );
     if (window.scrollY >= guideHeight) {
       if (stickiness !== true) {
         props.updateSticky(true);
@@ -84,7 +88,7 @@ function FilterNav(props) {
         rooms[i].addEventListener("click", (ev) => {
           const types = ["height", "light", "care"];
           types.forEach((type) => props.clearCriteria(type));
-          const room = props.rooms[ev.target.dataset.critval];
+          const room = props.rooms[ev.target.dataset.critval].criteria;
           room.forEach((criterion) => {
             props.updateCriteria(criterion[0], criterion[1]);
           });
@@ -341,7 +345,12 @@ function FilterNav(props) {
           onClick={(event) => {
             event.preventDefault();
             if (props.user) {
-              props.saveRoom(props.criteria, roomFormValue, props.rooms);
+              props.saveRoom(
+                props.criteria,
+                roomFormValue,
+                props.rooms,
+                props.user.token
+              );
             } else {
               history.push("/rooms");
               if (!props.collapse) {

@@ -27,7 +27,7 @@ plantRouter
       )
       .catch((err) => next(err));
   })
-  .post(cors.cors, (req, res, next) => {
+  .post(cors.corsWithOptions, (req, res, next) => {
     Plants.create(req.body)
       .then(
         (plant) => {
@@ -47,7 +47,7 @@ plantRouter
   .options(cors.corsWithOptions, (req, res) => {
     res.sendStatus(200);
   })
-  .put(cors.cors, (req, res, next) => {
+  .put(cors.corsWithOptions, (req, res, next) => {
     Plants.findByIdAndUpdate(req.params.plantId, { $set: req.body })
       .then(
         (plants) => {
@@ -61,7 +61,7 @@ plantRouter
       )
       .catch((err) => next(err));
   })
-  .delete(cors.cors, (req, res, next) => {
+  .delete(cors.corsWithOptions, (req, res, next) => {
     Plants.findByIdAndRemove(req.params.plantId)
       .then(
         (response) => {

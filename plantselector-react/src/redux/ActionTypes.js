@@ -23,3 +23,4 @@ export const SEND_FAVORITE = "SEND_FAVORITE";
 export const LOGGING_OUT = "LOGGING_OUT";
 export const LOGGED_OUT = "LOGGED_OUT";
 export const LOGOUT_FAILED = "LOGOUT_FAILED";
+export const UPDATE_FORM = "UPDATE_FORM";

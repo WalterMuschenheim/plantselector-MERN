@@ -7,7 +7,11 @@ function Favorite(props) {
     <div
       onClick={() => {
         if (props.user) {
-          props.updateFavorites(props.plantName, props.favorites);
+          props.updateFavorites(
+            props.plantName,
+            props.favorites,
+            props.user.token
+          );
         } else {
           history.push("/rooms");
 

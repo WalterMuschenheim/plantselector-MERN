@@ -19,8 +19,11 @@ import {
   saveRoom,
   removeRoom,
   fetchUser,
+  signUpUser,
   logoutUser,
+  setUserFormValue,
   updateFavorites,
+  loginFailed,
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -29,6 +32,7 @@ const mapStateToProps = (state) => {
     header: state.header,
     plants: state.plants,
     user: state.user,
+    userForm: state.userForm,
   };
 };
 
@@ -46,19 +50,26 @@ const mapDispatchToProps = (dispatch) => ({
   updateSticky: (isSticky) => dispatch(updateSticky(isSticky)),
   /* more functions! */
   fetchPlants: () => dispatch(fetchPlants()),
-  saveRoom: (criteria, room, rooms) =>
-    dispatch(saveRoom(criteria, room, rooms)),
-  removeRoom: (room) => dispatch(removeRoom(room)),
+  saveRoom: (criteria, room, rooms, token) =>
+    dispatch(saveRoom(criteria, room, rooms, token)),
+  removeRoom: (roomId, token) => dispatch(removeRoom(roomId, token)),
   fetchUser: ({ name, password }) => dispatch(fetchUser(name, password)),
-  logoutUser: () => dispatch(logoutUser()),
-  updateFavorites: (plantName, favorites) =>
-    dispatch(updateFavorites(plantName, favorites)),
+  signUpUser: ({ name, password }) => dispatch(signUpUser(name, password)),
+  logoutUser: (token) => dispatch(logoutUser(token)),
+  setUserFormValue: (key, value) => dispatch(setUserFormValue(key, value)),
+  resetUserErrorMessage: () => {
+    console.log("reset error message");
+    dispatch(loginFailed(null));
+  },
+  updateFavorites: (plantName, favorites, token) =>
+    dispatch(updateFavorites(plantName, favorites, token)),
 });
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.formControll = this.formControll.bind(this);
+    this.userFormControll = this.userFormControll.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
     this.toggleFilterFavorites = this.toggleFilterFavorites.bind(this);
   }
@@ -128,6 +139,10 @@ class Main extends Component {
     this.props.updateSearch(ev.target.value);
   }
 
+  userFormControll(key, ev) {
+    this.props.setUserFormValue(key, ev.target.value);
+  }
+
   toggleFilterFavorites() {
     this.setState({ filterFavorites: !this.state.filterFavorites });
   }
@@ -169,9 +184,14 @@ class Main extends Component {
           plants={this.props.plants.plants}
           isLoading={this.props.plants.isLoading}
           plantsErrMess={this.props.plants.errMess}
+          userFormControll={this.userFormControll}
+          userFormValue={this.props.userForm}
           fetchUser={this.props.fetchUser}
+          signUpUser={this.props.signUpUser}
           logoutUser={this.props.logoutUser}
           user={this.props.user.user}
+          errMess={this.props.user.errMess}
+          resetUserErrorMessage={this.props.resetUserErrorMessage}
         />
         <FilterNav
           updateCriteria={this.updateCriteria}
@@ -196,7 +216,7 @@ class Main extends Component {
           plants={filteredPlants}
           isLoading={this.props.plants.isLoading}
           errMess={this.props.plants.errMess}
-          navHeight={this.props.navHeight}
+          navHeight={this.props.header.navHeight}
           collapseHandler={this.props.collapseHandler}
           collapse={this.props.header.collapse}
         />

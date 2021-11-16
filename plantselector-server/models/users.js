@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const roomSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+  name: String,
   criteria: [[]],
 });
 
@@ -14,19 +12,11 @@ roomSchema.virtual("nameAsKey").get(function () {
 });
 
 const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
   favorites: [String],
   rooms: [roomSchema],
 });
 
-var Users = mongoose.model("User", userSchema);
+userSchema.plugin(passportLocalMongoose);
 
-module.exports = Users;
+// const Users = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema);

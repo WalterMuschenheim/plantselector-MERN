@@ -23,7 +23,7 @@ const dummyData = (connect) => {
   ];
 
   connect.then((db) => {
-    console.log("connected correctly to database");
+    console.log("dummy data connected correctly to database");
     Plants.count((err, count) => {
       if (count === 0) {
         Plants.create([

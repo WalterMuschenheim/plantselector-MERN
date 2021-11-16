@@ -19,11 +19,16 @@ export const User = (
         isLoading: false,
         user: {
           name: action.payload.userName,
-          password: action.payload.password,
+          token:
+            action.payload.token === undefined
+              ? state.user.token
+              : action.payload.token,
         },
         favorites: action.payload.favorites,
         rooms: action.payload.rooms,
       };
+    case ActionTypes.LOGIN_FAILED:
+      return { ...state, errMess: action.payload };
     case ActionTypes.UPDATING_FAVORITES:
       return { ...state, isLoading: true };
     case ActionTypes.UPDATE_FAVORITES:
@@ -44,18 +49,15 @@ export const User = (
     case ActionTypes.ADD_ROOM:
       return {
         ...state,
-        rooms: {
-          ...state.rooms,
-          [action.payload.room]: action.payload.criteria,
-        },
+        rooms: action.payload,
       };
     case ActionTypes.ROOM_FAILED:
       return { ...state, errMess: action.payload };
-    case ActionTypes.REMOVE_ROOM:
-      const rValue = action.payload;
-      const newRooms = state.rooms;
-      delete newRooms[rValue];
-      return { ...state, rooms: newRooms };
+    // case ActionTypes.REMOVE_ROOM:
+    //   const rValue = action.payload;
+    //   const newRooms = state.rooms;
+    //   delete newRooms[rValue];
+    //   return { ...state, rooms: newRooms };
     default:
       return state;
   }

@@ -2,8 +2,8 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import { Filters } from "./filters";
 import { Header } from "./header";
 import { Plants } from "./plants";
-import { Rooms } from "./rooms";
 import { User } from "./user";
+import { UserForm } from "./userForm";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
 
@@ -14,6 +14,7 @@ export const ConfigureStore = () => {
       header: Header,
       plants: Plants,
       user: User,
+      userForm: UserForm,
     }),
     applyMiddleware(thunk, logger)
   );

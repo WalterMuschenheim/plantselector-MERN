@@ -9,6 +9,174 @@ import {
 import { Router, Switch, Route, Redirect, useParams } from "react-router-dom";
 import { Spinner } from "./SpinnerComponent";
 import Favorite from "./FavoriteComponent";
+import baseUrl from "../shared/baseUrl";
+
+function UserGuide(props) {
+  // useEffect(() => {
+  //   onPlantChange(props.plant);
+  // }, [props.plant]);
+  const roomList = Object.keys(props.rooms).map((room) => {
+    const types = ["height", "light", "care"];
+    return (
+      <div className="row">
+        <div className="col-md-4">
+          <h5>
+            <span
+              id="delete-room"
+              onClick={() =>
+                props.removeRoom(props.rooms[room]._id, props.user.token)
+              }
+            >
+              x&nbsp;
+            </span>
+            <span>{room}</span>
+          </h5>
+        </div>
+        <div className="col-md-8">
+          {types.map((type) =>
+            props.rooms[room].criteria.map((item) => {
+              if (item[0] === type) {
+                return <span>{item[1]}, </span>;
+              }
+            })
+          )}
+        </div>
+      </div>
+    );
+  });
+
+  return (
+    <div className="container guide" id="plant-guide">
+      <div className="container guide-item">
+        <div className="row">
+          <div className="col-12">
+            {props.user !== null ? (
+              <h4>{`${props.user.name}'s Profile`}</h4>
+            ) : (
+              <h4>{props.formTitle}</h4>
+            )}
+          </div>
+        </div>
+
+        {props.user === null ? (
+          <div>
+            <UserForm
+              formTitle={props.form}
+              formHandler={props.formHandler}
+              userFormControll={props.userFormControll}
+              userFormValue={props.userFormValue}
+              toggleLogin={props.toggleLogin}
+              logInOrSignup={props.logInOrSignup}
+              errMess={props.errMess}
+              toggleErrorMessage={props.toggleErrorMessage}
+              resetUserErrorMessage={props.resetUserErrorMessage}
+            />
+            <div>
+              <span
+                onClick={() => {
+                  props.toggleLogin();
+                  props.resetUserErrorMessage();
+                }}
+              >
+                {props.logInOrSignup}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="row">
+            <div className="col-md-5">
+              <button onClick={() => props.logoutUser(props.user.token)}>
+                log out
+              </button>
+            </div>
+            <div className="col-md-7">{roomList}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function UserForm(props) {
+  const [errMess, setErrMess] = useState("");
+  return (
+    <form className="form-inline navbar-nav">
+      <input
+        className="form-control"
+        id="loginName"
+        type="text"
+        placeholder="User Name"
+        name="name"
+        value={
+          props.userFormValue.name !== undefined
+            ? props.userFormValue.name
+            : null
+        }
+        onChange={(event) => props.userFormControll("name", event)}
+      />
+      <input
+        className="form-control"
+        id="loginPass"
+        type="text"
+        placeholder="Password"
+        name="password"
+        value={
+          props.userFormValue.password !== undefined
+            ? props.userFormValue.password
+            : null
+        }
+        onChange={(event) => props.userFormControll("password", event)}
+      />
+      <input
+        type="submit"
+        onClick={(event) => {
+          event.preventDefault();
+          let newErrMess = "";
+          console.log(
+            "sigup form errors",
+            props.userFormValue.name !== undefined
+              ? props.userFormValue.name.length
+              : props.userFormValue.name,
+            props.userFormValue.password !== undefined
+              ? props.userFormValue.password.length
+              : props.userFormValue.password
+          );
+          if (
+            props.userFormValue.name === undefined ||
+            props.userFormValue.name.length === 0
+          ) {
+            newErrMess += "you must include a user name. ";
+          }
+          if (
+            props.userFormValue.password === undefined ||
+            props.userFormValue.password.length === 0
+          ) {
+            newErrMess += "you must include a password. ";
+          }
+          if (
+            // props.userFormValue.name !== undefined &&
+            // props.userFormValue.name.length !== 0 &&
+            // props.userFormValue.password !== undefined &&
+            // props.userFormValue.password.length !== 0
+            newErrMess === ""
+          ) {
+            setErrMess(newErrMess);
+            props.resetUserErrorMessage();
+            console.log(props.userFormValue);
+            props.formHandler(props.userFormValue);
+          } else {
+            setErrMess(newErrMess);
+          }
+          console.log("error message", errMess, props.userFormValue);
+        }}
+      />
+      <div className="alert">{errMess}</div>
+      <div className="alert">
+        {props.errMess !== null ? props.toggleErrorMessage : null}
+      </div>
+    </form>
+  );
+}
 
 function Guide(props) {
   const [status, setStatus] = useState("Closed");
@@ -16,6 +184,10 @@ function Guide(props) {
   const [currentPlant, setPlant] = useState(null);
 
   const onPlantChange = (plant) => setPlant(plant);
+
+  const [logIn, setLogIn] = useState(true);
+
+  const toggleLogin = () => setLogIn(!logIn);
 
   const onEntering = () => setStatus("Opening...");
 
@@ -31,7 +203,8 @@ function Guide(props) {
     //get the height of the guide and make that the offset value
     if (!props.isLoading) {
       let guideRect = guideRef.current.getBoundingClientRect();
-      props.updateGuideHeight(guideRect.height);
+      // props.updateGuideHeight(guideRect.height);
+      props.updateGuideHeight(guideRect.bottom);
     }
   }, [status, currentPlant]);
 
@@ -95,7 +268,7 @@ function Guide(props) {
               })}
               <div id="modal-image-container">
                 <img
-                  src={`./plantselector-react/assets/images/${props.plant.imageURL}`}
+                  src={`${baseUrl}/images/${props.plant.imageURL}`} //get image from server
                   alt={props.plant.plantName}
                 />
               </div>
@@ -157,121 +330,6 @@ function Guide(props) {
     );
   }
 
-  function UserGuide(props) {
-    useEffect(() => {
-      onPlantChange(props.plant);
-    }, [props.plant]);
-    const roomList = Object.keys(props.rooms).map((room) => {
-      const types = ["height", "light", "care"];
-      return (
-        <div className="row">
-          <div className="col-md-4">
-            <h5>
-              <span id="delete-room" onClick={() => props.removeRoom(room)}>
-                x&nbsp;
-              </span>
-              <span>{room}</span>
-            </h5>
-          </div>
-          <div className="col-md-8">
-            {types.map((type) =>
-              props.rooms[room].map((item) => {
-                if (item[0] === type) {
-                  return <span>{item[1]}, </span>;
-                }
-              })
-            )}
-          </div>
-        </div>
-      );
-    });
-    const [userFormValue, setUserFormValue] = useState({
-      name: undefined,
-      password: undefined,
-    });
-    const [errMess, setErrMess] = useState("");
-
-    const userForm = (
-      <form className="form-inline navbar-nav">
-        <input
-          className="form-control"
-          id="loginName"
-          type="text"
-          placeholder="User Name"
-          name="name"
-          value={userFormValue.name !== undefined ? userFormValue.name : null}
-          onChange={(event) =>
-            setUserFormValue({ ...userFormValue, name: event.target.value })
-          }
-        />
-        <input
-          className="form-control"
-          id="loginPass"
-          type="text"
-          placeholder="Password"
-          name="password"
-          value={
-            userFormValue.password !== undefined ? userFormValue.password : null
-          }
-          onChange={(event) =>
-            setUserFormValue({ ...userFormValue, password: event.target.value })
-          }
-        />
-        <input
-          type="submit"
-          onClick={(event) => {
-            event.preventDefault();
-            let newErrMess = "";
-            if (userFormValue.name === undefined) {
-              newErrMess += "you must include a user name. ";
-            }
-            if (userFormValue.password === undefined) {
-              newErrMess += "you must include a password. ";
-            }
-            if (
-              userFormValue.name !== undefined &&
-              userFormValue.password !== undefined
-            ) {
-              setErrMess("");
-              props.fetchUser(userFormValue);
-            } else {
-              setErrMess(newErrMess);
-            }
-            console.log("error message", errMess, userFormValue, alert);
-          }}
-        />
-        <div className="alert">{errMess}</div>
-      </form>
-    );
-
-    return (
-      <div className="container guide" id="plant-guide">
-        <div className="container guide-item">
-          <div className="row">
-            <div className="col-12">
-              {props.user !== null ? (
-                <h4>{`${props.user.name}'s Profile`}</h4>
-              ) : (
-                <h4>Log In</h4>
-              )}
-            </div>
-          </div>
-
-          {props.user === null ? (
-            userForm
-          ) : (
-            <div className="row">
-              <div className="col-md-5">
-                <button onClick={props.logoutUser}>log out</button>
-              </div>
-              <div className="col-md-7">{roomList}</div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   if (!props.isLoading) {
     return (
       <Collapse
@@ -288,7 +346,6 @@ function Guide(props) {
                 rooms={props.rooms}
                 removeRoom={props.removeRoom}
                 criteria={props.criteria}
-                fetchUser={props.fetchUser}
                 logoutUser={props.logoutUser}
                 user={props.user}
                 updateGuideHeight={props.updateGuideHeight}
@@ -296,6 +353,23 @@ function Guide(props) {
                 plants={props.plants}
                 updateFavorites={props.updateFavorites}
                 favorites={props.favorites}
+                formTitle={logIn ? "Log In" : "Sign Up"}
+                formHandler={logIn ? props.fetchUser : props.signUpUser}
+                userFormControll={props.userFormControll}
+                userFormValue={props.userFormValue}
+                toggleLogin={toggleLogin}
+                logInOrSignup={
+                  logIn
+                    ? "Don't have an account? Sign Up"
+                    : "Already have an account? Log In"
+                }
+                toggleErrorMessage={
+                  logIn
+                    ? "There was a problem logging in"
+                    : "There was a problem signing up"
+                }
+                errMess={props.errMess}
+                resetUserErrorMessage={props.resetUserErrorMessage}
               />
             </Route>
             <Route path="/:plantName">

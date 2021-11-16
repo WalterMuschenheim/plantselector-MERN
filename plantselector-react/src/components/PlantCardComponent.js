@@ -1,13 +1,14 @@
 import { Card, CardImg, CardBody, CardText, CardTitle } from "reactstrap";
 import { Link } from "react-router-dom";
 import React from "react";
+import baseUrl from "../shared/baseUrl";
 
 function PlantCard(props) {
   const MaybeImg = () => {
     if (props.plant.imageURL) {
       return (
         <CardImg
-          src={`./plantselector-react/assets/images/${props.plant.imageURL}`}
+          src={`${baseUrl}/images/${props.plant.imageURL}`} //get image from server
           alt={props.plant.plantName}
         />
       );

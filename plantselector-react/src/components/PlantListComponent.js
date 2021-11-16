@@ -5,7 +5,7 @@ import { Spinner } from "./SpinnerComponent";
 function PlantList(props) {
   if (!props.isLoading) {
     return (
-      <div className="container" style={{ marginTop: props.navHeight }}>
+      <div className="container" style={{ marginTop: `${props.navHeight}px` }}>
         <div className="container" id="plantlist">
           <div className="row row-content">
             <div className="" id="plantlist-inner">
