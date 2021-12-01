@@ -13,6 +13,7 @@ function PlantList(props) {
                 {props.plants.map(function (plant) {
                   return (
                     <PlantCard
+                      key={plant.name}
                       plant={plant}
                       collapseHandler={props.collapseHandler}
                       collapse={props.collapse}

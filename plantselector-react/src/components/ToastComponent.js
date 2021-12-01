@@ -2,26 +2,30 @@ import React, { useState } from "react";
 import { Toast, ToastBody, ToastHeader } from "reactstrap";
 
 function Toasts(props) {
-  React.useEffect(() => {
-    var filterItems = document.querySelectorAll(".toast-p");
-    for (let i = 0; i < filterItems.length; i++) {
-      filterItems[i].addEventListener("click", (ev) =>
-        props.updateCriteria(null, ev.target.dataset.critval)
-      );
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   var filterItems = document.querySelectorAll(".toast-p");
+  //   for (let i = 0; i < filterItems.length; i++) {
+  //     filterItems[i].addEventListener("click", (ev) =>
+  //       props.updateCriteria(null, ev.target.dataset.critval)
+  //     );
+  //   }
+  // }, []);
 
   const toggle = () => props.clearCriteria(props.crittype);
 
   const ToastItems = props.criteria.map((criterium) => {
     return (
-      <p className="toast-p">
-        <a
-          className="toast-link text-decoration-none"
+      <p
+        className="toast-p"
+        onClick={(ev) => props.updateCriteria(null, ev.target.dataset.critval)}
+        key={criterium[1]}
+      >
+        <span
+          className="toast-link text-decoration-none pointer"
           data-critval={criterium[1]}
         >
           {criterium[1]}
-        </a>
+        </span>
       </p>
     );
   });

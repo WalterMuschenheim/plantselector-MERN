@@ -5,7 +5,7 @@ import Guide from "./GuideComponent";
 import ReactDOM from "react-dom";
 import { filter } from "minimatch";
 import { connect } from "react-redux";
-import { HashRouter, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import {
   addCriteria,
   removeCriteria,
@@ -72,6 +72,7 @@ class Main extends Component {
     this.userFormControll = this.userFormControll.bind(this);
     this.updateCriteria = this.updateCriteria.bind(this);
     this.toggleFilterFavorites = this.toggleFilterFavorites.bind(this);
+    this.turnOffFilterFavorites = this.turnOffFilterFavorites.bind(this);
   }
   state = {
     filterFavorites: false,
@@ -147,6 +148,10 @@ class Main extends Component {
     this.setState({ filterFavorites: !this.state.filterFavorites });
   }
 
+  turnOffFilterFavorites() {
+    this.setState({ filterFavorites: false });
+  }
+
   valCheck(item, criteria) {
     var check = item.dataset.critval;
     return (
@@ -172,10 +177,10 @@ class Main extends Component {
         <Guide
           collapseHandler={this.props.collapseHandler}
           updateFavorites={this.props.updateFavorites}
-          favorites={this.props.user.favorites}
+          turnOffFilterFavorites={this.turnOffFilterFavorites}
+          user={this.props.user}
+          resetUserErrorMessage={this.props.resetUserErrorMessage}
           removeRoom={this.props.removeRoom}
-          rooms={this.props.user.rooms}
-          roomsErrMess={this.props.user.errMess}
           criteria={this.props.filters.criteria}
           updateGuideHeight={this.props.updateGuideHeight}
           updateNavHeight={this.props.updateNavHeight}
@@ -189,17 +194,14 @@ class Main extends Component {
           fetchUser={this.props.fetchUser}
           signUpUser={this.props.signUpUser}
           logoutUser={this.props.logoutUser}
-          user={this.props.user.user}
-          errMess={this.props.user.errMess}
-          resetUserErrorMessage={this.props.resetUserErrorMessage}
         />
         <FilterNav
           updateCriteria={this.updateCriteria}
           clearCriteria={this.props.clearCriteria}
           criteria={this.props.filters.criteria}
-          rooms={this.props.user.rooms}
+          // rooms={this.props.user.rooms}
           saveRoom={this.props.saveRoom}
-          user={this.props.user.user}
+          user={this.props.user}
           toggleFilterFavorites={this.toggleFilterFavorites}
           valCheck={this.valCheck}
           formControll={this.formControll}

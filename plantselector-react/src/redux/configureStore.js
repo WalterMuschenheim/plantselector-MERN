@@ -1,4 +1,4 @@
-import { combineReducers, createStore, applyMiddleware } from "redux";
+import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import { Filters } from "./filters";
 import { Header } from "./header";
 import { Plants } from "./plants";
@@ -6,6 +6,8 @@ import { User } from "./user";
 import { UserForm } from "./userForm";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const ConfigureStore = () => {
   const store = createStore(
@@ -16,7 +18,7 @@ export const ConfigureStore = () => {
       user: User,
       userForm: UserForm,
     }),
-    applyMiddleware(thunk, logger)
+    composeEnhancers(applyMiddleware(thunk, logger))
   );
   return store;
 };

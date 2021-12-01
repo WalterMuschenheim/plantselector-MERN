@@ -140,15 +140,19 @@ export const fetchUser = (userName, password) => (dispatch) => {
   })
     .then((result) => result.json())
     .then((result) => {
-      console.log(result.user.rooms);
-      dispatch(
-        loginUser(
-          result.user.username,
-          result.user.favorites,
-          result.user.rooms,
-          result.token
-        )
-      );
+      if (result.err !== undefined) {
+        console.log("200 error", result.err);
+        dispatch(loginFailed(result.err));
+      } else {
+        dispatch(
+          loginUser(
+            result.user.username,
+            result.user.favorites,
+            result.user.rooms,
+            result.token
+          )
+        );
+      }
     })
     .catch((error) => {
       console.log(error.message);
@@ -191,15 +195,19 @@ export const signUpUser = (userName, password) => (dispatch) => {
     )
     .then((result) => result.json())
     .then((result) => {
-      console.log(result.user.rooms);
-      dispatch(
-        loginUser(
-          result.user.username,
-          result.user.favorites,
-          result.user.rooms,
-          result.token
-        )
-      );
+      if (result.err !== undefined) {
+        console.log("200 error", result.err);
+        dispatch(loginFailed(result.err));
+      } else {
+        dispatch(
+          loginUser(
+            result.user.username,
+            result.user.favorites,
+            result.user.rooms,
+            result.token
+          )
+        );
+      }
     })
     .catch((error) => {
       console.log(error.message);

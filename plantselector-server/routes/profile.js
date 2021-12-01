@@ -22,9 +22,9 @@ profileRouter
       new Users({ username: req.body.username }),
       req.body.password,
       (err, user) => {
-        console.log(user);
+        console.log(err);
         if (err) {
-          res.statusCode = 500;
+          res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
           res.json({ err: err });
         } else {
@@ -47,24 +47,54 @@ profileRouter
   })
   .post(
     cors.corsWithOptions,
-    passport.authenticate("local", { failureFlash: true }),
+    // passport.authenticate("local"),
     (req, res, next) => {
-      console.log(req.user);
-      const token = authenticate.getToken({ _id: req.user._id });
-      const response = {};
-      response.username = req.user.username;
-      response.password = req.user.password;
-      response.favorites = req.user.favorites;
-      response.rooms = {};
-      req.user.rooms.forEach((room) => {
-        Object.assign(response.rooms, room.nameAsKey);
-      });
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.json({
-        user: response,
-        token: token,
-      });
+      passport.authenticate("local", function (err, user, info) {
+        if (err) {
+          res.json({ err: { success: false, message: err } });
+        } else {
+          if (!user) {
+            res.json({
+              err: {
+                success: false,
+                message: "username or password incorrect",
+              },
+            });
+          } else {
+            req.login(user, function (err) {
+              if (err) {
+                res.statusCode = 200;
+                res.setHeader("Content-Type", "application/json");
+                res.json({ err: { success: false, message: err } });
+              } else {
+                console.log(req.user);
+                const token = authenticate.getToken({ _id: req.user._id });
+                const response = {};
+                response.username = req.user.username;
+                response.password = req.user.password;
+                response.favorites = req.user.favorites;
+                response.rooms = {};
+                req.user.rooms.forEach((room) => {
+                  Object.assign(response.rooms, room.nameAsKey);
+                });
+                res.statusCode = 200;
+                res.setHeader("Content-Type", "application/json");
+                res.json({
+                  user: response,
+                  token: token,
+                });
+              }
+            });
+          }
+        }
+      })(req, res);
+    },
+    (err, req, res, next) => {
+      if (err) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ err: err });
+      }
     }
   );
 

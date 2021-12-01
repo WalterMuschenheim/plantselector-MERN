@@ -111,6 +111,7 @@ function FilterNav(props) {
     const roomList = Object.keys(props.rooms).map((room) => {
       return (
         <DropdownItem
+          key={room}
           className="rooms"
           data-crittype="rooms"
           data-critval={room}
@@ -297,6 +298,7 @@ function FilterNav(props) {
       ) {
         return (
           <Toasts
+            key={type}
             updateCriteria={props.updateCriteria}
             clearCriteria={props.clearCriteria}
             criteria={props.criteria.filter(function (criterium) {
@@ -341,7 +343,7 @@ function FilterNav(props) {
         />
         <button
           type="submit"
-          class="btn btn-light btn-block"
+          className="btn btn-light btn-block"
           onClick={(event) => {
             event.preventDefault();
             if (props.user) {
@@ -351,12 +353,12 @@ function FilterNav(props) {
                 props.rooms,
                 props.user.token
               );
+              console.log("rooms", props.rooms);
             } else {
               history.push("/rooms");
               if (!props.collapse) {
                 props.collapseHandler();
               }
-              console.log("user", props.user);
             }
           }}
         >
@@ -415,8 +417,8 @@ function FilterNav(props) {
               criteria={props.criteria}
               toggleFilterFavorites={props.toggleFilterFavorites}
               filterFavorites={props.filterFavorites}
-              rooms={props.rooms}
-              user={props.user}
+              rooms={props.user.rooms}
+              user={props.user.user}
             />
             <form className="form-inline navbar-nav">
               <input
@@ -431,9 +433,9 @@ function FilterNav(props) {
             {props.criteria.length > 0 && (
               <SaveRoomForm
                 saveRoom={props.saveRoom}
-                rooms={props.rooms}
+                rooms={props.user.rooms}
                 criteria={props.criteria}
-                user={props.user}
+                user={props.user.user}
                 collapseHandler={props.collapseHandler}
                 collapse={props.collapse}
               />
@@ -444,8 +446,8 @@ function FilterNav(props) {
             clearCriteria={props.clearCriteria}
             criteria={props.criteria}
             saveRoom={props.saveRoom}
-            rooms={props.rooms}
-            user={props.user}
+            rooms={props.user.rooms}
+            user={props.user.user}
             collapseHandler={props.collapseHandler}
             collapse={props.collapse}
           />

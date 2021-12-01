@@ -3,32 +3,26 @@ services:
   react:
     build: "./plantselector-react"
     restart: always
+    container_name: react-client
     ports:
       - "3000:3000"
-    links:
-      - server:plantselector-server
-    networks:
-      - plantnetwork
+    depends_on:
+      - mongodb
+      - server
   server:
     build: "./plantselector-server"
     restart: always
+    container_name: express-server
     ports:
       - "9000:9000"
     depends_on:
       - mongodb
-    networks:
-      - plantnetwork
   mongodb:
     image: mongo
     restart: always
     container_name: mongodb
-    volumes:
-      - ./data-node:/data/db
+    # volumes:
+    #   - db-data:/data/db
     ports:
       - 27017:27017
     command: mongod --noauth
-    networks:
-      - plantnetwork
-networks:
-  plantnetwork:
-    driver: bridge

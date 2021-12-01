@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Collapse,
   Popover,
-  UncontrolledPopover,
+  Button,
   PopoverBody,
   PopoverHeader,
 } from "reactstrap";
@@ -18,11 +18,11 @@ function UserGuide(props) {
   const roomList = Object.keys(props.rooms).map((room) => {
     const types = ["height", "light", "care"];
     return (
-      <div className="row">
+      <div className="row" key={room}>
         <div className="col-md-4">
           <h5>
             <span
-              id="delete-room"
+              class="delete-room pointer"
               onClick={() =>
                 props.removeRoom(props.rooms[room]._id, props.user.token)
               }
@@ -33,13 +33,17 @@ function UserGuide(props) {
           </h5>
         </div>
         <div className="col-md-8">
-          {types.map((type) =>
-            props.rooms[room].criteria.map((item) => {
-              if (item[0] === type) {
-                return <span>{item[1]}, </span>;
-              }
-            })
-          )}
+          <div className="row">
+            {types.map((type) => (
+              <ul key={type} className="col-md">
+                {props.rooms[room].criteria.map((item) => {
+                  if (item[0] === type) {
+                    return <li key={item[1]}>{item[1]}</li>;
+                  }
+                })}
+              </ul>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -85,9 +89,14 @@ function UserGuide(props) {
         ) : (
           <div className="row">
             <div className="col-md-5">
-              <button onClick={() => props.logoutUser(props.user.token)}>
+              <Button
+                onClick={() => {
+                  props.logoutUser(props.user.token);
+                  props.turnOffFilterFavorites();
+                }}
+              >
                 log out
-              </button>
+              </Button>
             </div>
             <div className="col-md-7">{roomList}</div>
           </div>
@@ -127,7 +136,7 @@ function UserForm(props) {
         }
         onChange={(event) => props.userFormControll("password", event)}
       />
-      <input
+      <Button
         type="submit"
         onClick={(event) => {
           event.preventDefault();
@@ -145,13 +154,13 @@ function UserForm(props) {
             props.userFormValue.name === undefined ||
             props.userFormValue.name.length === 0
           ) {
-            newErrMess += "you must include a user name. ";
+            newErrMess += "You must include a user name \n";
           }
           if (
             props.userFormValue.password === undefined ||
             props.userFormValue.password.length === 0
           ) {
-            newErrMess += "you must include a password. ";
+            newErrMess += "You must include a password \n";
           }
           if (
             // props.userFormValue.name !== undefined &&
@@ -167,12 +176,18 @@ function UserForm(props) {
           } else {
             setErrMess(newErrMess);
           }
-          console.log("error message", errMess, props.userFormValue);
         }}
-      />
-      <div className="alert">{errMess}</div>
+      >
+        Submit
+      </Button>
       <div className="alert">
-        {props.errMess !== null ? props.toggleErrorMessage : null}
+        {errMess !== ""
+          ? errMess
+          : props.errMess !== null
+          ? props.errMess.message !== undefined
+            ? props.errMess.message
+            : props.toggleErrorMessage
+          : null}
       </div>
     </form>
   );
@@ -221,7 +236,7 @@ function Guide(props) {
       const toggle = () => setPopoverOpen(!popoverOpen);
 
       return (
-        <div class={"modal-popover " + position}>
+        <div className={"modal-popover " + position}>
           <a id={"Popover-" + position} role="button"></a>
           <Popover
             trigger="hover"
@@ -260,6 +275,7 @@ function Guide(props) {
               {popovers.map((popover) => {
                 return (
                   <PopoverItem
+                    key={popover.topic}
                     position={popover.position}
                     topic={popover.topic}
                     plant={props.plant}
@@ -343,16 +359,17 @@ function Guide(props) {
           <Switch>
             <Route path="/rooms" exact>
               <UserGuide
-                rooms={props.rooms}
+                rooms={props.user.rooms}
                 removeRoom={props.removeRoom}
                 criteria={props.criteria}
                 logoutUser={props.logoutUser}
-                user={props.user}
+                user={props.user.user}
                 updateGuideHeight={props.updateGuideHeight}
                 collapse={props.collapse}
                 plants={props.plants}
                 updateFavorites={props.updateFavorites}
-                favorites={props.favorites}
+                favorites={props.user.favorites}
+                turnOffFilterFavorites={props.turnOffFilterFavorites}
                 formTitle={logIn ? "Log In" : "Sign Up"}
                 formHandler={logIn ? props.fetchUser : props.signUpUser}
                 userFormControll={props.userFormControll}
@@ -368,7 +385,7 @@ function Guide(props) {
                     ? "There was a problem logging in"
                     : "There was a problem signing up"
                 }
-                errMess={props.errMess}
+                errMess={props.user.errMess}
                 resetUserErrorMessage={props.resetUserErrorMessage}
               />
             </Route>
@@ -378,8 +395,8 @@ function Guide(props) {
                 collapse={props.collapse}
                 plants={props.plants}
                 updateFavorites={props.updateFavorites}
-                favorites={props.favorites}
-                user={props.user}
+                favorites={props.user.favorites}
+                user={props.user.user}
               />
             </Route>
 
