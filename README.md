@@ -1,6 +1,8 @@
-# This is a full stack MERN implementation of the plantselector app that adds a database and the ability to create user accounts
+# This is a full stack MERN implementation of the plantselector app
 
-The clinet for this project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It adds a database and the ability to create user accounts.
+
+The client for this project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
