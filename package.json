@@ -4,10 +4,10 @@
   "description": "a full stack implementation of the plantselector app",
   "main": "index.js",
   "scripts": {
-    "start": "npm run deploy",
+    "start": "cd plantselector-server && npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy": "cd plantselector-server && rm -rf build && npm install && cd ../plantselector-react && npm install",
-    "deploy": "npm run predeploy && cd plantselector-react && npm run build && mv build ../plantselector-server && cd ../plantselector-server && npm start"
+    "deploy": "npm run predeploy && cd plantselector-react && npm run build && mv build ../plantselector-server"
   },
   "repository": {
     "type": "git",
