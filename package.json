@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./plantselector-server/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "predeploy": "cd plantselector-server && rm -rf build && npm install && cd ../plantselector-react && npm install",
+    "predeploy": "rm -rf ./plantselector-server/build && npm install --prefix ./plantselector-react && npm install --prefix ./plantselector-server",
     "deploy": "npm run predeploy && cd plantselector-react && npm run build && mv build ../plantselector-server"
   },
   "repository": {
