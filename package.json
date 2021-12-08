@@ -4,9 +4,10 @@
   "description": "a full stack implementation of the plantselector app",
   "main": "index.js",
   "scripts": {
-    "start": "node ./plantselector-server/bin/www",
+    "start": "node ./node_modules/plantselector-server/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "rm -rf ./plantselector-server/build && cd plantselector-react && npm run build && mv build ../plantselector-server"
+    "deploy": "rm -rf ./plantselector-server ./plantselector-react && cd node_modules/plantselector-react && npm run build && mv build ../plantselector-server"
+    /**"deploy": "rm -rf ./plantselector-server/build && cd plantselector-react && npm run build && mv build ../plantselector-server"**/
   },
   "repository": {
     "type": "git",
