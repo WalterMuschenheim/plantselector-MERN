@@ -1,8 +1,10 @@
 # This is a full stack MERN implementation of the plantselector app
 
-It adds a database and the ability to create user accounts.
+It adds an express server and mongoose database configuration so that users can create user accounts and save favorites and 'rooms', wich are saved sets of filter criteria.
 
-The client for this project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can see a production build of this app at https://plantselector.herokuapp.com
+
+This project was built with [Create React App](https://github.com/facebook/create-react-app) and [Express Application Generator](http://expressjs.com/en/starter/generator.html).
 
 ## Available Scripts
 
@@ -10,5 +12,9 @@ In the project directory, you can run:
 
 ### `docker compose up`
 
-To spin up the server, client and database in networked containers (requires Docker installed on your system).\
+To spin up the server, client and database in networked containers. This command requires you to have Docker installed on your system. A development build of the client will be severd to your local host.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+### `npm run deploy && npm start`
+
+To create a production build of the app and start the server. You will need to set the MONGODB_URI environment variable to a working MongoDB database uri for the app to function properly.
