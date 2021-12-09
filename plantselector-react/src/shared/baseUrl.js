@@ -1,4 +1,4 @@
-const production = process.env.BASE_URL;
+const production = "https://plantselector.herokuapp.com";
 const development = "http://localhost:9000/";
 const baseUrl = process.env.NODE_ENV ? production : development;
 

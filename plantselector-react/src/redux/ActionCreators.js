@@ -49,7 +49,7 @@ export const addPlants = ({ plants, explainers }) => {
 
 export const fetchPlants = () => (dispatch) => {
   dispatch(plantsLoading());
-
+  console.log(baseUrl);
   fetch(baseUrl + "plants")
     .then((plants) => plants.json())
     .then((plants) => {
