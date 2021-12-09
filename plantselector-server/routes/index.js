@@ -3,7 +3,7 @@ var indexRouter = express.Router();
 var path = require("path");
 
 /* GET home page. Avoid 404s caused by BrowserRouter */
-indexRouter.get("/*", function (req, res, next) {
+indexRouter.get("/", function (req, res, next) {
   res.sendFile(path.join(__dirname, "..", "build", "index.html"));
 });
 
