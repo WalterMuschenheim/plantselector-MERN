@@ -1,4 +1,4 @@
-# This is a full stack MERN implementation of the plantselector app
+# Plantselector-MERN is a full stack MERN implementation of the plantselector app
 
 It adds an express server and mongoose database configuration so that users can create user accounts and save favorites and 'rooms', wich are saved sets of filter criteria.
 
