@@ -12,7 +12,7 @@ In the project directory, you can run:
 
 ### `docker compose up`
 
-To spin up the server, client and database in networked containers. This command requires you to have Docker installed on your system. A development build of the client will be severd to your local host.\
+To spin up the server, client and database in networked containers. This command requires you to have Docker installed on your system. A development build of the client will be served to your local host.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `npm run build && npm start`
