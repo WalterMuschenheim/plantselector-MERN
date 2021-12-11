@@ -44,6 +44,11 @@ app.use("/explainers", explainerRouter);
 app.use("/profile", profileRouter);
 app.use("/users", userRouter);
 
+// avoid 404s caused by BrowserRouter
+app.get("/*", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
