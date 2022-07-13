@@ -1,6 +1,6 @@
 # Plantselector-MERN is a full stack implementation of the plantselector app
 
-It adds an express server and mongoose database configuration so that users can create user accounts and save favorites and 'rooms', wich are saved sets of filter criteria.
+It adds an express server and mongoose database configuration so that users can create user accounts and save favorite plants and 'rooms' with specific lighting, care and size conditions.
 
 You can see a production build of this app at [https://plantselector.herokuapp.com](https://plantselector.herokuapp.com)
 
